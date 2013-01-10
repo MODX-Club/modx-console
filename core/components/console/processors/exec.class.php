@@ -12,6 +12,8 @@ class ConsoleExecProcessor extends modProcessor{
     
     public function process() {
         $modx = & $this->modx;
+        $modx->setLogTarget('HTML');
+        $modx->setLogLevel(xPDO::LOG_LEVEL_DEBUG);
         $code = $this->getProperty('code');
         $code = preg_replace('/^ *(<\?php|<\?)/mi', '', $code);
         return eval($code);
