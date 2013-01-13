@@ -18,7 +18,7 @@ ModConsole.panel.Console = function(config) {
             ,stateId: 'mod-console-home-tabpanel'
             ,stateEvents: ['tabchange']
             ,items: [{
-                title: _('console.tab')
+                title: _('console_tab')
                 ,defaults: { autoHeight: true }
                 ,items: [{
                     xtype: 'mod-console-panel-codeeditor'
@@ -60,7 +60,7 @@ ModConsole.panel.CodeEditor = function(config) {
             ,value: '<?php\n'
         },{
             xtype: 'button'
-            ,text: _('console.exec')
+            ,text: _('console_exec')
             ,listeners: {
                 click: function(){
                     this.request();
@@ -69,12 +69,10 @@ ModConsole.panel.CodeEditor = function(config) {
             }
         },{
             id: 'mod-console-coderesult'
-            ,xtype: Ext.ComponentMgr.types['modx-texteditor'] ? 'modx-texteditor' : 'textarea'
+            ,xtype: Ext.ComponentMgr.types['modx-texteditor'] ? 'modx-texteditor' : 'panel'
+            ,border: false
             ,width: '99%'
-            ,height: '100%'
-            ,style: {
-                'min-height': '400px'
-            }
+            ,autoHeight: true
         }]
     });
     ModConsole.panel.CodeEditor.superclass.constructor.call(this,config);
