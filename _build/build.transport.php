@@ -17,11 +17,6 @@ $tstart = $mtime;
 print '<pre>';
 require_once dirname(__FILE__). '/build.config.php';
 
-
-$modx= new modX();
-
-
-$modx->initialize('mgr');
 $modx->setLogLevel(modX::LOG_LEVEL_INFO);
 $modx->setLogTarget('ECHO'); echo '<pre>'; flush();
 
@@ -111,10 +106,10 @@ $vehicle->resolve('file',array(
 $modx->log(modX::LOG_LEVEL_INFO,'Packaged in CorePath'); flush();
 
 $vehicle->resolve('file',array(
-    'source' => $sources['source_assets'],
-    'target' => "return MODX_ASSETS_PATH . 'components/';",
+    'source' => $sources['source_manager'],
+    'target' => "return MODX_MANAGER_PATH . 'components/';",
 ));
-$modx->log(modX::LOG_LEVEL_INFO,'Packaged in AssetsPath'); flush();
+$modx->log(modX::LOG_LEVEL_INFO,'Packaged in ManagerPath'); flush();
  
 
 $modx->log(modX::LOG_LEVEL_INFO,'Packaged in resolvers.'); 

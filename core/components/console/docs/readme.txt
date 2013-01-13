@@ -1,4 +1,4 @@
 Console
 =====================================================
 
-Console allow to execute php-code in front-end by simple interface.
+Console allow to execute php-code at back-end by simple interface.
