@@ -22,6 +22,9 @@ $modx= new modX();
 
 
 $modx->initialize('mgr');
+
+$modx->setOption('copy_exclude_items', array('.', '..','.svn','.svn/','.svn\\', '.git'));
+
 $modx->setLogLevel(modX::LOG_LEVEL_INFO);
 $modx->setLogTarget('ECHO'); echo '<pre>'; flush();
 
