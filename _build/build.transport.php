@@ -1,11 +1,9 @@
 <?php
 
-
-
-$pkg_version = '1.2.0';
+$pkg_version = '2.0.1';
 $pkg_release = 'rc';
-define('PKG_VERSION', $pkg_version); 
-define('PKG_RELEASE', $pkg_release); 
+define('PKG_VERSION', $pkg_version);
+define('PKG_RELEASE', $pkg_release);
 
 
 $mtime= microtime();
@@ -40,7 +38,7 @@ $attributes = array (
             xPDOTransport::UNIQUE_KEY => array ('namespace','controller'),
         ),
     ),
-); 
+);
 
 
 /* add namespace */
@@ -56,13 +54,13 @@ $vehicle = $builder->createVehicle($namespace,array(
 $builder->putVehicle($vehicle);
 $modx->log(modX::LOG_LEVEL_INFO,"Packaged in ".NAMESPACE_NAME." namespace."); flush();
 unset($vehicle,$namespace);
- 
+
 /* create category */
 $category= $modx->newObject('modCategory');
 $category->set('id',1);
 $category->set('category',PKG_NAME);
 $modx->log(modX::LOG_LEVEL_INFO,'Packaged in category.'); flush();
-  
+
 /* menus */
 $menus = include $sources['data'].'transport.menu.php';
 foreach($menus as $menu){
@@ -110,9 +108,9 @@ $vehicle->resolve('file',array(
     'target' => "return MODX_MANAGER_PATH . 'components/';",
 ));
 $modx->log(modX::LOG_LEVEL_INFO,'Packaged in ManagerPath'); flush();
- 
 
-$modx->log(modX::LOG_LEVEL_INFO,'Packaged in resolvers.'); 
+
+$modx->log(modX::LOG_LEVEL_INFO,'Packaged in resolvers.');
 
 flush();
 
@@ -122,7 +120,7 @@ $builder->putVehicle($vehicle);
 $builder->setPackageAttributes(array(
     'license' => file_get_contents($sources['docs'] . 'license.txt'),
     'readme' => file_get_contents($sources['docs'] . 'readme.txt'),
-    'changelog' => file_get_contents($sources['docs'] . 'changelog.txt'), 
+    'changelog' => file_get_contents($sources['docs'] . 'changelog.txt'),
 ));
 $modx->log(modX::LOG_LEVEL_INFO,'Packaged in package attributes.'); flush();
 

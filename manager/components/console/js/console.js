@@ -3,7 +3,7 @@ var ModConsole = function(config) {
     ModConsole.superclass.constructor.call(this,config);
 };
 Ext.extend(ModConsole,Ext.Component,{
-    page:{},window:{},grid:{},tree:{},panel:{},combo:{},config:{},form: {}
+    page:{},window:{},grid:{},tree:{},panel:{},combo:{},config:{},form:{},menu:{}
 });
 Ext.reg('mod-console',ModConsole);
 

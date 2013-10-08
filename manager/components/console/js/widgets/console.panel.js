@@ -39,7 +39,7 @@ ModConsole.panel.CodeEditor = function(config) {
         ,baseCls: 'modx-formpanel'
         ,cls: 'container'
         ,items: [{
-            html: '<p>'+_('console_desc')+'</p>'
+            html: '<p>'+_('console.desc')+'</p>'
             ,border: false
             ,bodyCssClass: 'panel-desc'
         },{
@@ -75,6 +75,20 @@ ModConsole.panel.CodeEditor = function(config) {
             ,style: {
                 'min-height': '400px'
             }
+            ,listeners:{
+                afterrender: function (comp) {
+                    if(Ext.ComponentMgr.types['modx-texteditor'] === 'textarea') return;
+                    var el = comp.getEl();
+                    el.on('contextmenu', function(e,t,o) {
+                        e.preventDefault();
+                        // if empty area 
+                        if(el.dom.textContent[0] == 1 && el.dom.textContent[el.dom.textContent.length - 1] == 'X') return;
+                        
+                        var menu = new ModConsole.menu.CodeEditorContextMenu({callerElement:el});
+                        menu.showAt(e.getXY());
+                    });
+                }
+            }
         }]
     });
     ModConsole.panel.CodeEditor.superclass.constructor.call(this,config);
@@ -96,3 +110,32 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
     }
 });
 Ext.reg('mod-console-panel-codeeditor',ModConsole.panel.CodeEditor);
+
+
+ModConsole.menu.CodeEditorContextMenu = function(config){
+    config = config || {};
+    Ext.apply(config,{
+        items: [{
+            text: _('console.menu_context-copy'),
+            iconCls: 'edit',
+            handler: {fn:this.onClick,scope:this}
+        }]
+    });
+    ModConsole.menu.CodeEditorContextMenu.superclass.constructor.call(this,config);
+}
+Ext.extend(ModConsole.menu.CodeEditorContextMenu,Ext.menu.Menu, {
+    onClick:function(){
+        w = new Ext.Window({
+            title:'Data',
+            width:500,
+            items:[{
+                'xtype':'textarea'
+                ,'width':'98%'
+                ,'height':300
+                ,value:this.callerElement.dom.innerHTML
+            }]
+        });
+        w.show();
+        this.hide();
+    }
+});

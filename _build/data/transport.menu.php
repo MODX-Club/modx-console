@@ -21,7 +21,7 @@ $menu= $modx->newObject('modMenu');
 $menu->fromArray(array(
     'text' => 'console',
     'parent' => 'components',
-    'description' => 'console_desc',
+    'description' => 'console.desc',
     'icon' => 'images/icons/plugin.gif',
     'menuindex' => 0,
     'params' => '',
@@ -34,7 +34,7 @@ unset($action);
 $menus[] = $menu;
 
 
- 
+
 
 $menus[] = $menu;
 
