@@ -79,11 +79,11 @@ ModConsole.panel.CodeEditor = function(config) {
                 afterrender: function (comp) {
                     if(Ext.ComponentMgr.types['modx-texteditor'] === 'textarea') return;
                     var el = comp.getEl();
-                    el.on('contextmenu', function(e,t,o) {
+                    el.on('contextmenu', function(e) {
                         e.preventDefault();
-                        // if empty area 
+                        // if empty area
                         if(el.dom.textContent[0] == 1 && el.dom.textContent[el.dom.textContent.length - 1] == 'X') return;
-                        
+
                         var menu = new ModConsole.menu.CodeEditorContextMenu({callerElement:el});
                         menu.showAt(e.getXY());
                     });
