@@ -69,7 +69,7 @@ ModConsole.panel.CodeEditor = function(config) {
             }
         },{
             id: 'mod-console-coderesult'
-            ,xtype: Ext.ComponentMgr.types['modx-texteditor'] ? 'modx-texteditor' : 'panel'
+            ,xtype: 'textarea'//Ext.ComponentMgr.types['modx-texteditor'] ? 'modx-texteditor' : 'panel'
             ,border: false
             ,width: '99%'
             ,autoHeight: true
@@ -84,12 +84,16 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
         var result = Ext.get('mod-console-coderesult');
         var code = area.getValue();
 
-        result.getUpdater().update({
+        var upd = result.getUpdater();
+        upd.update({
             url: ModConsole.config.connector_url + 'console.php',
             params:{
                 action: 'exec',
                 code: code
             }
+        })
+        upd.on('update',function(){
+            result.setHeight(400)
         })
     }
 });
