@@ -57,7 +57,7 @@ ModConsole.panel.CodeEditor = function(config) {
                 }
                 ,scope: this
             }
-            ,value: '<?php\n'
+            ,value: this.getCodeEditorValue()
         },{
             xtype: 'button'
             ,text: _('console_exec')
@@ -77,6 +77,7 @@ ModConsole.panel.CodeEditor = function(config) {
     });
     ModConsole.panel.CodeEditor.superclass.constructor.call(this,config);
 };
+
 Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
     request:function(){
 
@@ -95,6 +96,21 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
         upd.on('update',function(){
             result.setHeight(400)
         })
+    },
+    getCodeEditorValue:function(){
+        MODx.Ajax.request({
+            url: 'components/console/connectors/console.php',
+            params: {
+                action: 'getcode'
+            },
+            listeners: {
+        		success: {fn: function(response) {
+            		var el = Ext.getCmp('mod-console-codeeditor');
+        			el.setValue(response.message);
+        		}, scope: this}
+        	}
+        });
+        return '<?php\n';
     }
 });
 Ext.reg('mod-console-panel-codeeditor',ModConsole.panel.CodeEditor);
