@@ -38,6 +38,9 @@ ModConsole.panel.CodeEditor = function(config) {
         ,border: false
         ,baseCls: 'modx-formpanel'
         ,cls: 'container'
+        ,style: { 
+                  margin: '15px 0 0'
+              }
         ,items: [{
             html: '<p>'+_('console_desc')+'</p>'
             ,border: false
@@ -47,7 +50,10 @@ ModConsole.panel.CodeEditor = function(config) {
             ,xtype: Ext.ComponentMgr.types['modx-texteditor'] ? 'modx-texteditor' : 'textarea'
             ,mimeType: 'application/x-php'
             ,height: 300
-            ,width: '99%'
+            ,width: '98%'
+            ,style: { 
+                  margin: '15px'
+              }
             ,enableKeyEvents: true
             ,listeners: {
                 keydown: function(editor, e){
@@ -59,20 +65,60 @@ ModConsole.panel.CodeEditor = function(config) {
             }
             ,value: this.getCodeEditorValue()
         },{
-            xtype: 'button'
-            ,text: _('console_exec')
-            ,listeners: {
-                click: function(){
-                    this.request();
-                }
-                ,scope: this
-            }
-        },{
-            id: 'mod-console-coderesult'
-            ,xtype: 'textarea'//Ext.ComponentMgr.types['modx-texteditor'] ? 'modx-texteditor' : 'panel'
+            bodyCssClass: 'panel-desc'
             ,border: false
-            ,width: '99%'
-            ,autoHeight: true
+            ,items: [{
+                xtype: 'button'
+                ,text: _('console_exec')
+                ,listeners: {
+                    click: function(){
+                        this.request();
+                    }
+                    ,scope: this
+                }
+            }]
+        
+        },{
+            xtype: 'modx-vtabs'
+            ,defaults: { border: false ,autoHeight: true }
+            ,border: true
+            ,width:'99%'
+            ,height: '100%'
+            ,stateful: true
+            ,stateId: 'mod-console-result-tabpanel'
+            ,stateEvents: ['tabchange']
+            ,border: false
+            ,items: [{
+                xtype: 'panel'
+                ,title: _('console_formated_result')
+                ,border: false
+                ,style: { 
+                          padding: '15px'
+                      }
+                ,items: [{
+                    id: 'mod-console-coderesult'
+                    ,xtype: 'panel'
+                    ,cls: 'x-panel-body'
+                    ,width: '99%'
+                    ,height: 200
+                    ,border: false
+                }]
+            
+            },{
+                xtype: 'panel'
+                ,title: _('console_source_result')
+                ,border: false
+                ,style: { 
+                          padding: '15px'
+                      }
+                ,items: [{
+                    id: 'mod-console-coderesult-text'
+                    ,xtype: 'textarea'
+                    ,cls: 'x-panel-body'
+                    ,width: '99%'
+                    ,height: 400
+                }]
+            }]
         }]
     });
     ModConsole.panel.CodeEditor.superclass.constructor.call(this,config);
@@ -93,8 +139,12 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
                 code: code
             }
         })
+        upd.on('beforeupdate',function(){
+            Ext.get('mod-console-coderesult-text').update('...');
+        });
         upd.on('update',function(){
-            result.setHeight(400)
+            Ext.get('mod-console-coderesult-text').update(result.dom.innerHTML);
+            //result.setHeight(400)
         })
     },
     getCodeEditorValue:function(){
