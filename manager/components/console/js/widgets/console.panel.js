@@ -140,10 +140,14 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
             }
         })
         upd.on('beforeupdate',function(){
-            Ext.get('mod-console-coderesult-text').update('...');
+            if (Ext.get('mod-console-coderesult-text')) {
+                Ext.get('mod-console-coderesult-text').update('...');
+            }
         });
         upd.on('update',function(){
-            Ext.get('mod-console-coderesult-text').update(result.dom.innerHTML);
+            if (Ext.get('mod-console-coderesult-text')) {
+                Ext.get('mod-console-coderesult-text').update(result.dom.innerHTML);
+            }
             //result.setHeight(400)
         })
     },
