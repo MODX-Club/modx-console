@@ -69,7 +69,7 @@ ModConsole.panel.CodeEditor = function(config) {
             }
         },{
             id: 'mod-console-coderesult'
-            ,xtype: 'textarea'//Ext.ComponentMgr.types['modx-texteditor'] ? 'modx-texteditor' : 'panel'
+            ,xtype: 'panel'//Ext.ComponentMgr.types['modx-texteditor'] ? 'modx-texteditor' : 'panel'
             ,border: false
             ,width: '99%'
             ,autoHeight: true
@@ -94,7 +94,7 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
             }
         })
         upd.on('update',function(){
-            result.setHeight(400)
+            // result.setHeight(400)
         })
     },
     getCodeEditorValue:function(){
