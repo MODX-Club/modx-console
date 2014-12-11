@@ -33,14 +33,50 @@ Ext.reg('mod-console-panel-console',ModConsole.panel.Console);
 
 ModConsole.panel.CodeEditor = function(config) {
     config = config || {};
+    
+    var visibleHeight = Ext.getCmp('modx-content').getHeight() - 300;
+    if(visibleHeight < 200){
+        visibleHeight = 200;
+    }
+    
+    
+    this.resultPanel = new Ext.Panel({
+        id: 'mod-console-coderesult'
+        ,cls: 'x-panel-body'
+        ,width: '99%' 
+        ,border: false
+        ,listeners:{
+            "afterrender": {
+                fn: function(el){ 
+                    var upd = el.getUpdater();
+                    upd.on('beforeupdate',function(a, b){
+                        this.coderesultText.setValue('...');
+                    }, this);
+                    upd.on('update',function(result, response){ 
+                        this.coderesultText.setValue(response.responseText); 
+                    }, this);
+                }
+            }
+            ,scope: this
+        }
+    });
+    
+    this.coderesultText = new Ext.form.TextArea({
+        id: 'mod-console-coderesult-text'
+        ,cls: 'x-panel-body'
+        ,width: '99%'
+        ,height: visibleHeight / 2
+        ,style: "overflow:auto;"
+    });
+    
     Ext.apply(config,{
         id: 'modxconsole-codeeditor'
         ,border: false
         ,baseCls: 'modx-formpanel'
         ,cls: 'container'
         ,style: { 
-                  margin: '15px 0 0'
-              }
+            margin: '15px 0 0'
+        }
         ,items: [{
             html: '<p>'+_('console_desc')+'</p>'
             ,border: false
@@ -80,8 +116,14 @@ ModConsole.panel.CodeEditor = function(config) {
         
         },{
             xtype: 'modx-vtabs'
-            ,defaults: { border: false ,autoHeight: true }
-            ,border: true
+            ,defaults: { 
+                border: false
+                ,autoHeight: false 
+                ,bodyStyle: "height: "+ visibleHeight / 2 +"px;overflow:auto;"
+                ,style: { 
+                    padding: '15px' 
+                }
+            }
             ,width:'99%'
             ,height: '100%'
             ,stateful: true
@@ -91,33 +133,12 @@ ModConsole.panel.CodeEditor = function(config) {
             ,items: [{
                 xtype: 'panel'
                 ,title: _('console_formated_result')
-                ,border: false
-                ,style: { 
-                          padding: '15px'
-                      }
-                ,items: [{
-                    id: 'mod-console-coderesult'
-                    ,xtype: 'panel'
-                    ,cls: 'x-panel-body'
-                    ,width: '99%'
-                    ,height: 200
-                    ,border: false
-                }]
-            
+                ,items: [this.resultPanel]
             },{
                 xtype: 'panel'
                 ,title: _('console_source_result')
                 ,border: false
-                ,style: { 
-                          padding: '15px'
-                      }
-                ,items: [{
-                    id: 'mod-console-coderesult-text'
-                    ,xtype: 'textarea'
-                    ,cls: 'x-panel-body'
-                    ,width: '99%'
-                    ,height: 400
-                }]
+                ,items: [this.coderesultText]
             }]
         }]
     });
@@ -125,31 +146,18 @@ ModConsole.panel.CodeEditor = function(config) {
 };
 
 Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
-    request:function(){
-
-        var area = Ext.getCmp('mod-console-codeeditor');
-        var result = Ext.get('mod-console-coderesult');
-        var code = area.getValue();
-
-        var upd = result.getUpdater();
-        upd.update({
+    request:function(){ 
+        
+        var area = Ext.getCmp('mod-console-codeeditor'); 
+        var code = area.getValue();  
+          
+        this.resultPanel.getUpdater().update({
             url: ModConsole.config.connector_url + 'console.php',
             params:{
                 action: 'exec',
                 code: code
             }
-        })
-        upd.on('beforeupdate',function(){
-            if (Ext.get('mod-console-coderesult-text')) {
-                Ext.get('mod-console-coderesult-text').update('...');
-            }
         });
-        upd.on('update',function(){
-            if (Ext.get('mod-console-coderesult-text')) {
-                Ext.get('mod-console-coderesult-text').update(result.dom.innerHTML);
-            }
-            //result.setHeight(400)
-        })
     },
     getCodeEditorValue:function(){
         MODx.Ajax.request({
