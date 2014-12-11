@@ -17,7 +17,11 @@ class ConsoleExecProcessor extends modProcessor{
         $code = $this->getProperty('code');
         $_SESSION['Console']['code'] = $code;
         $code = preg_replace('/^ *(<\?php|<\?)/mi', '', $code);
-        return eval($code);
+        ob_start();
+        eval($code);
+        $output = ob_get_contents();
+        ob_end_clean();
+        return ($output);
     }
 }
 
