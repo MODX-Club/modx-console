@@ -21,7 +21,15 @@ class ConsoleExecProcessor extends modProcessor{
         eval($code);
         $output = ob_get_contents();
         ob_end_clean();
-        return ($output);
+        $completed = true;
+        if (isset($_SESSION['Console']['completed'])) {
+            if ($_SESSION['Console']['completed'] === false) {
+                $completed = false;
+            } else {
+                unset($_SESSION['Console']['completed']);
+            }
+        }
+        return $modx->toJSON(array('completed' => $completed, 'output' => $output));
     }
 }
 
