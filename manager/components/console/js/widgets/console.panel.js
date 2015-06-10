@@ -12,7 +12,7 @@ ModConsole.panel.Console = function(config) {
             xtype: 'modx-tabs'
             ,defaults: { border: false ,autoHeight: true }
             ,border: true
-            ,width:'100%'
+            ,width:'98%'
             ,height: '100%'
             ,stateful: true
             ,stateId: 'mod-console-home-tabpanel'
@@ -50,10 +50,20 @@ ModConsole.panel.CodeEditor = function(config) {
                 fn: function(el){ 
                     var upd = el.getUpdater();
                     upd.on('beforeupdate',function(a, b){
-                        this.coderesultText.setValue('...');
+                        if (upd.showLoadIndicator !== false) {
+                            this.coderesultText.setValue('...');
+                        }
                     }, this);
-                    upd.on('update',function(result, response){ 
-                        this.coderesultText.setValue(response.responseText); 
+                    upd.on('update',function(result, response){
+                        var res = JSON.parse(response.responseText);
+                        this.resultPanel.update(res.output);
+                        this.coderesultText.setValue(res.output);
+                        if (res.completed === false) {
+                            upd.showLoadIndicator = false;
+                            this.request();
+                        } else {
+                            upd.showLoadIndicator = true;
+                        }
                     }, this);
                 }
             }
@@ -124,7 +134,7 @@ ModConsole.panel.CodeEditor = function(config) {
                     padding: '15px' 
                 }
             }
-            ,width:'99%'
+            ,width:'98%'
             ,height: '100%'
             ,stateful: true
             ,stateId: 'mod-console-result-tabpanel'
@@ -150,8 +160,9 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
         
         var area = Ext.getCmp('mod-console-codeeditor'); 
         var code = area.getValue();  
-          
-        this.resultPanel.getUpdater().update({
+        
+        var upd = this.resultPanel.getUpdater();
+        upd.update({
             url: ModConsole.config.connector_url + 'console.php',
             params:{
                 action: 'exec',
