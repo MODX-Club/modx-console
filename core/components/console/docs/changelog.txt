@@ -1,3 +1,7 @@
+Console-2.0.4-beta
+=============================================================
+- Ignoring code changes while recursive queries going;
+
 Console-2.0.3-beta
 =============================================================
 - Added recursive queries;
