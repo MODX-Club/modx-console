@@ -13,7 +13,7 @@ $_lang['console_file_name'] = 'Имя файла';
 $_lang['console_close'] = 'Закрыть';
 $_lang['console_load'] = 'Загрузить';
 
-$_lang['console_err_path_nf'] = 'Путь ней найден!';
-$_lang['console_err_file_nf'] = 'Файл ней найден!';
-$_lang['console_err_files_nf'] = 'Файлы ней найдены!';
+$_lang['console_err_path_nf'] = 'Путь не найден!';
+$_lang['console_err_file_nf'] = 'Файл не найден!';
+$_lang['console_err_files_nf'] = 'Файлы не найдены!';
 $_lang['console_err_file_ns'] = 'Файл не выбран!';
