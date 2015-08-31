@@ -1,3 +1,7 @@
+Console-2.1.0-beta
+=============================================================
+- Added the feature to save and load the console code.
+
 Console-2.0.3-beta
 =============================================================
 - Added recursive queries;
