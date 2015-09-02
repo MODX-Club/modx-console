@@ -7,7 +7,7 @@ class ConsoleSaveCodeProcessor extends modProcessor{
         if (!is_dir($path) && !mkdir($path,0755)) $this->failure($this->modx->lexicon('console_err_path_nf'));
         if (!empty($code)) file_put_contents($path.$fileName.'.php', $code );
 
-        return $this->success($code);
+        return $this->success('');
     }
 }
 

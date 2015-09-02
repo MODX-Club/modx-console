@@ -212,7 +212,7 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
 			listeners: {
 				success: {fn: function(response) {
 					if (response.message.length > 0) {
-						ModConsole.files = response.message;
+						this.files = response.message;
 						var w = MODx.load({
 							xtype: 'console-files-window',
 							id: Ext.id(),
