@@ -125,21 +125,50 @@ ModConsole.panel.CodeEditor = function(config) {
 				xtype: 'button'
 				,text: _('console_save')
 				,style: 'marginLeft:10px; float:right'
-				,listeners: {
-					click: function () {
-						this.saveCode2File();
-					}
-					, scope: this
+				,menu: {
+					items: [{
+						text: _('console_save_to_file'),
+						handler: function() {
+							this.saveFile();
+						},
+						scope: this
+					}, {
+						text: _('console_save_snippet'),
+						handler: function() {
+							this.saveSnippet();
+						},
+						scope: this
+					}]
+				}
+				,handler: function(){return false;}
+			}, {
+				xtype: 'button'
+				, text: _('console_load')
+				, style: 'marginLeft:10px; float:right'
+				, menu: {
+					items: [{
+						text: _('console_load_from_file'),
+						handler: function () {
+							this.getFiles();
+						},
+						scope: this
+					}, {
+						text: _('console_load_from_snippet'),
+						handler: function () {
+							this.getSnippets();
+						},
+						scope: this
+					}]
+				}
+				, handler: function () {
+					return false;
 				}
 			}, {
 				xtype: 'button'
-				,text: _('console_load')
-				,style: 'marginLeft:10px; float:right'
-				,listeners: {
-					click: function () {
-						this.getFiles();
-					}
-					, scope: this
+				, text: _('console_clear')
+				, style: 'float:right'
+				, handler: function () {
+					Ext.getCmp('mod-console-codeeditor').setValue('<?php\n');
 				}
 			}]
 		},{
@@ -203,6 +232,41 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
 		});
 		return '<?php\n';
 	},
+	getSnippets:function(){
+		MODx.Ajax.request({
+			url: 'components/console/connectors/console.php',
+			params: {
+				action: 'getsnippets'
+			},
+			listeners: {
+				success: {fn: function(response) {
+					ModConsole.comboObjects = response.message;
+					if (this.loadObjectsWindow) this.loadObjectsWindow.el.remove();
+					this.loadObjectsWindow = MODx.load({
+						xtype: 'console-snippets-window',
+						id: Ext.id(),
+						store: response.message,
+						listeners: {
+							success: {
+								fn: function (response) {
+									if (response.a.result.success) {
+										var code = response.a.result.message ? response.a.result.message : '<?php\n';
+										var el = Ext.getCmp('mod-console-codeeditor');
+										el.setValue(code);
+									}
+								}, scope: this
+							},
+							failure: {
+								fn: function(r){}, scope: this
+							}
+						}
+					});
+					this.loadObjectsWindow.show(Ext.EventObject.target);
+				}, scope: this},
+				failure: {fn: function(response) {}, scope: this}
+			}
+		});
+	},
 	getFiles:function(){
 		MODx.Ajax.request({
 			url: 'components/console/connectors/console.php',
@@ -211,80 +275,149 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
 			},
 			listeners: {
 				success: {fn: function(response) {
-					if (response.message.length > 0) {
-						this.files = response.message;
-						var w = MODx.load({
-							xtype: 'console-files-window',
-							id: Ext.id(),
-							listeners: {
-								success: {
-									fn: function (response) {
-										if (response.a.result.success) {
-											var code = response.a.result.message ? response.a.result.message : '<?php\n';
-											var el = Ext.getCmp('mod-console-codeeditor');
-											el.setValue(code);
-										}
-									}, scope: this
-								},
-								failure: {
-									fn: function(r){}, scope: this
-								}
+					//ModConsole.comboObjects = response.message;
+					if (this.loadObjectsWindow) this.loadObjectsWindow.el.remove();
+					this.loadObjectsWindow = MODx.load({
+						xtype: 'console-files-window',
+						id: Ext.id(),
+						store: response.message,
+						listeners: {
+							success: {
+								fn: function (response) {
+									if (response.a.result.success) {
+										var code = response.a.result.message ? response.a.result.message : '<?php\n';
+										Ext.getCmp('mod-console-codeeditor').setValue(code);
+									}
+								}, scope: this
+							},
+							failure: {
+								fn: function(r){}, scope: this
 							}
-						});
-						w.show(Ext.EventObject.target);
-					}
+						}
+					});
+					this.loadObjectsWindow.show(Ext.EventObject.target);
 				}, scope: this},
 				failure: {fn: function(response) {}, scope: this}
 			}
 		});
 	},
-	saveCode2File:function(){
+	saveSnippet:function(){
 		var code = Ext.getCmp('mod-console-codeeditor').getValue();
-		Ext.MessageBox.prompt(
-			'Имя файла'
-			,'Введите имя файла без расширения.'
-			,function(b,name) {
-				MODx.Ajax.request({
-					url: 'components/console/connectors/console.php',
-					params: {
-						action: 'savecode',
-						code: code,
-						file: name
-					},
-					listeners: {
-						failure: {fn: function(response) {
-						}, scope: this}
-					}
-				});
 
+		if (this.saveObjectWindow) this.saveObjectWindow.el.remove();
+		this.saveObjectWindow = MODx.load({
+			xtype: 'console-savecode-window',
+			id: Ext.id(),
+			action: 'savesnippet',
+			title: _('console_snippet'),
+			fields: [{
+				xtype: 'hidden',
+				name: 'code',
+				value: code
+			}, {
+				xtype: 'textfield',
+				name: 'name',
+				value: ModConsole.snippetName || 'test',
+				anchor: '100%'
+			}, {
+				xtype: 'checkbox',
+				name: 'overwrite',
+				boxLabel: _('console_overwrite_snippet'),
+				//style: {paddingTop:'0px'},
+				checked: true
+			}],
+			listeners: {
+				success: {
+					fn: function (response) {
+						if (response.a.result.success) {
+						}
+					}, scope: this
+				},
+				failure: {
+					fn: function(r){}, scope: this
+				}
 			}
-		);
+		});
+		this.saveObjectWindow.show(Ext.EventObject.target);
+	},
+	saveFile:function(){
+		var code = Ext.getCmp('mod-console-codeeditor').getValue();
+
+		if (this.saveObjectWindow) this.saveObjectWindow.el.remove();
+		this.saveObjectWindow = MODx.load({
+			xtype: 'console-savecode-window',
+			id: Ext.id(),
+			action: 'savefile',
+			title: _('console_file'),
+			fields: [{
+				xtype: 'hidden',
+				name: 'code',
+				value: code
+			}, {
+				xtype: 'textfield',
+				name: 'name',
+				fieldLabel: _('console_enter_file_name'),
+				value: ModConsole.fileName || 'test',
+				anchor: '100%'
+			}],
+			listeners: {
+				success: {
+					fn: function (response) {
+						if (response.a.result.success) {
+
+						}
+					}, scope: this
+				},
+				failure: {
+					fn: function(r){}, scope: this
+				}
+			}
+		});
+		this.saveObjectWindow.show(Ext.EventObject.target);
 	}
 
 });
 Ext.reg('mod-console-panel-codeeditor',ModConsole.panel.CodeEditor);
 
 /*******************************************************************/
-ModConsole.window.SelectFiles = function (config) {
+ModConsole.window.SaveCode = function (config) {
 	config = config || {};
-	if (!config.id) {
-		config.id = 'console-files-window';
-	}
+
 	Ext.applyIf(config, {
-		title: _('console_select_file'),
 		width: 300,
 		url: 'components/console/connectors/console.php',
-		action: 'loadcode',
+		keys: [{
+			key: Ext.EventObject.ENTER, shift: true, fn: function () {
+				this.submit()
+			}, scope: this
+		}]
+	});
+	ModConsole.window.SaveCode.superclass.constructor.call(this, config);
+};
+Ext.extend(ModConsole.window.SaveCode, MODx.Window);
+Ext.reg('console-savecode-window', ModConsole.window.SaveCode);
+
+// Select Snippet Window
+ModConsole.window.SelectSnippet = function (config) {
+	config = config || {};
+	if (!config.id) {
+		config.id = 'console-snippets-window';
+	}
+	Ext.applyIf(config, {
+		title: _('console_snippet'),
+		width: 400,
+		url: 'components/console/connectors/console.php',
+		action: 'loadsnippet',
 		fields: [{
-			xtype: 'console-combo-files',
-			name: 'file',
-			emptyText: _('console_file_name'),
-			//style: {marginLeft: '20px'},
-			id: config.id + '-filename-field'
-			,anchor: '100%'
+			xtype: 'console-combo-objects',
+			name: 'snippet',
+			emptyText: _('console_select_snippet'),
+			store: config.store,
+			anchor: '100%'
 		}],
 		keys: [{
 			key: Ext.EventObject.ENTER, shift: true, fn: function () {
+				ModConsole.snippetName = Ext.getCmp('comboObjectName').getValue();
 				this.submit()
 			}, scope: this
 		}],
@@ -299,6 +432,58 @@ ModConsole.window.SelectFiles = function (config) {
 			text: _('console_load'),
 			id: config.id + '-load-btn',
 			handler: function () {
+				ModConsole.snippetName = Ext.getCmp('comboObjectName').getValue();
+				this.submit();
+			},
+			scope: this
+		}],
+		listeners: {
+
+		}
+	});
+	ModConsole.window.SelectSnippet.superclass.constructor.call(this, config);
+};
+Ext.extend(ModConsole.window.SelectSnippet, MODx.Window);
+Ext.reg('console-snippets-window', ModConsole.window.SelectSnippet);
+
+// Select File Window
+ModConsole.window.SelectFiles = function (config) {
+	config = config || {};
+	if (!config.id) {
+		config.id = 'console-files-window';
+	}
+	Ext.applyIf(config, {
+		title: _('console_file'),
+		width: 400,
+		url: 'components/console/connectors/console.php',
+		action: 'loadfile',
+		fields: [{
+			xtype: 'console-combo-objects',
+			name: 'file',
+			store: config.store,
+			emptyText: _('console_select_file'),
+			anchor: '100%'
+		}],
+		keys: [{
+			key: Ext.EventObject.ENTER, shift: true, fn: function () {
+				var fileName = Ext.getCmp('comboObjectName').getValue();
+				ModConsole.fileName = fileName.substring(0, fileName.length-4);
+				this.submit()
+			}, scope: this
+		}],
+		buttons: [{
+			text: _('console_close'),
+			id: config.id + '-close-btn',
+			handler: function () {
+				this.hide();
+			},
+			scope: this
+		}, {
+			text: _('console_load'),
+			id: config.id + '-load-btn',
+			handler: function () {
+				var fileName = Ext.getCmp('comboObjectName').getValue();
+				ModConsole.fileName = fileName.substring(0, fileName.length-4);
 				this.submit();
 			},
 			scope: this
@@ -309,19 +494,20 @@ ModConsole.window.SelectFiles = function (config) {
 Ext.extend(ModConsole.window.SelectFiles, MODx.Window);
 Ext.reg('console-files-window', ModConsole.window.SelectFiles);
 
-ModConsole.combo.Files = function(config) {
+
+ModConsole.combo.Objects = function(config) {
 	config = config || {};
 	Ext.applyIf(config,{
 		triggerAction: 'all',
+		id: 'comboObjectName',
 		mode: 'local',
 		hideMode: 'offsets',
 		autoScroll: true,
 		maxHeight: 200,
-		store: ModConsole.files,
 		hiddenName: 'file',
 		editable: false
 	});
-	ModConsole.combo.Files.superclass.constructor.call(this,config);
+	ModConsole.combo.Objects.superclass.constructor.call(this,config);
 };
-Ext.extend(ModConsole.combo.Files,MODx.combo.ComboBox);
-Ext.reg('console-combo-files',ModConsole.combo.Files);
+Ext.extend(ModConsole.combo.Objects,MODx.combo.ComboBox);
+Ext.reg('console-combo-objects',ModConsole.combo.Objects);
