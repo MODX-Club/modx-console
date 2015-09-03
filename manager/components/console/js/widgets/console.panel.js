@@ -12,7 +12,7 @@ ModConsole.panel.Console = function(config) {
 			xtype: 'modx-tabs'
 			,defaults: { border: false ,autoHeight: true }
 			,border: true
-			,width:'98%'
+			,width:'100%'
 			,height: '100%'
 			,stateful: true
 			,stateId: 'mod-console-home-tabpanel'
@@ -95,7 +95,7 @@ ModConsole.panel.CodeEditor = function(config) {
 			,xtype: Ext.ComponentMgr.types['modx-texteditor'] ? 'modx-texteditor' : 'textarea'
 			,mimeType: 'application/x-php'
 			,height: 300
-			,width: '98%'
+			,width: 'auto'
 			,style: {
 				margin: '15px'
 			}
@@ -385,6 +385,7 @@ ModConsole.window.SaveCode = function (config) {
 
 	Ext.applyIf(config, {
 		width: 300,
+		modal: true,
 		url: 'components/console/connectors/console.php',
 		keys: [{
 			key: Ext.EventObject.ENTER, shift: true, fn: function () {
@@ -406,6 +407,7 @@ ModConsole.window.SelectSnippet = function (config) {
 	Ext.applyIf(config, {
 		title: _('console_snippet'),
 		width: 400,
+		modal: true,
 		url: 'components/console/connectors/console.php',
 		action: 'loadsnippet',
 		fields: [{
@@ -455,6 +457,7 @@ ModConsole.window.SelectFiles = function (config) {
 	Ext.applyIf(config, {
 		title: _('console_file'),
 		width: 400,
+		modal: true,
 		url: 'components/console/connectors/console.php',
 		action: 'loadfile',
 		fields: [{
