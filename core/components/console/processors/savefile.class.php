@@ -1,6 +1,9 @@
 <?php
 
 class ConsoleSaveFileProcessor extends modProcessor{
+    
+    public $permission = 'console.save_file';
+    
     public function process() {
         $code = trim($this->getProperty('code',''));
         $fileName = basename(trim($this->getProperty('name','')));
