@@ -11,4 +11,3 @@ class ConsoleGetCodeProcessor extends modProcessor{
 }
 
 return 'ConsoleGetCodeProcessor';
-?>
