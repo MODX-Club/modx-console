@@ -26,6 +26,7 @@ $_lang['console_err_path_nf'] = 'Путь не найден!';
 $_lang['console_err_file_nf'] = 'Файл не найден!';
 $_lang['console_err_files_nf'] = 'Файлы не найдены!';
 $_lang['console_err_file_ns'] = 'Файл не выбран!';
+$_lang['console_err_file_nsp'] = 'Укажите имя файла!';
 $_lang['console_err_snippet_ns'] = 'Сниппет не выбран!';
 $_lang['console_err_snippet_nf'] = 'Сниппет не найден!';
 $_lang['console_err_snippet_ae'] = 'Сниппет с таким именем уже существует!';

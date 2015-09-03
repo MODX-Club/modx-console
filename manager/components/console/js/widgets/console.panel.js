@@ -317,6 +317,7 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
 			}, {
 				xtype: 'textfield',
 				name: 'name',
+				allowBlank: false,
 				value: ModConsole.snippetName || 'test',
 				anchor: '100%'
 			}, {
@@ -356,6 +357,7 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
 			}, {
 				xtype: 'textfield',
 				name: 'name',
+				allowBlank: false,
 				fieldLabel: _('console_enter_file_name'),
 				value: ModConsole.fileName || 'test',
 				anchor: '100%'
@@ -385,6 +387,7 @@ ModConsole.window.SaveCode = function (config) {
 
 	Ext.applyIf(config, {
 		width: 300,
+		autoHeight: true,
 		modal: true,
 		url: 'components/console/connectors/console.php',
 		keys: [{

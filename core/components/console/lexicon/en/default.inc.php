@@ -26,6 +26,7 @@ $_lang['console_err_path_nf'] = 'The path is not found!';
 $_lang['console_err_file_nf'] = 'The file does not exist!';
 $_lang['console_err_files_nf'] = 'Did not find any files!';
 $_lang['console_err_file_ns'] = 'File is not specified!';
+$_lang['console_err_file_nsp'] = 'Specify the file name!';
 $_lang['console_err_snippet_ns'] = 'No snippet specified!';
 $_lang['console_err_snippet_nf'] = 'Snippet not found!';
 $_lang['console_err_snippet_ae'] = 'Snippet already exists!';
