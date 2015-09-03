@@ -34,4 +34,3 @@ class ConsoleExecProcessor extends modProcessor{
 }
 
 return 'ConsoleExecProcessor';
-?>
