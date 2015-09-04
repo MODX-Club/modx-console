@@ -60,7 +60,7 @@ ModConsole.panel.CodeEditor = function(config) {
                         this.coderesultText.setValue(res.output);
                         if (res.completed === false) {
                             upd.showLoadIndicator = false;
-                            this.request();
+                            this.request('store');
                         } else {
                             upd.showLoadIndicator = true;
                         }
@@ -156,18 +156,22 @@ ModConsole.panel.CodeEditor = function(config) {
 };
 
 Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
-    request:function(){ 
+    request:function(source){ 
         
+        source = source || 'area';
         var area = Ext.getCmp('mod-console-codeeditor'); 
         var code = area.getValue();  
         
         var upd = this.resultPanel.getUpdater();
+        var params = {
+                action: 'exec',
+            };
+        if (source == 'area') {
+            params.code = code;
+        }
         upd.update({
             url: ModConsole.config.connector_url + 'console.php',
-            params:{
-                action: 'exec',
-                code: code
-            }
+            params: params
         });
     },
     getCodeEditorValue:function(){

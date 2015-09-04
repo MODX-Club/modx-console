@@ -15,6 +15,9 @@ class ConsoleExecProcessor extends modProcessor{
         $modx->setLogTarget('HTML');
         $modx->setLogLevel(xPDO::LOG_LEVEL_DEBUG);
         $code = $this->getProperty('code');
+        if (!$code && isset($_SESSION['Console']['code'])) {
+            $code = $_SESSION['Console']['code'];
+        }
         $_SESSION['Console']['code'] = $code;
         $code = preg_replace('/^ *(<\?php|<\?)/mi', '', $code);
         ob_start();
