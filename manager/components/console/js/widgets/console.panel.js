@@ -110,67 +110,60 @@ ModConsole.panel.CodeEditor = function(config) {
 			}
 			,value: this.getCodeEditorValue()
 		},{
-			bodyCssClass: 'panel-desc'
-			,border: false
-			,items: [{
-				xtype: 'button'
-				, text: _('console_exec')
-				, listeners: {
-					click: function () {
-						this.request();
-					}
-					, scope: this
-				}
-			},{
-				xtype: 'button'
-				,text: _('console_save')
-				,style: 'marginLeft:10px; float:right'
-				,menu: {
-					items: [{
-						text: _('console_save_to_file'),
-						handler: function() {
-							this.saveFile();
-						},
-						scope: this
-					}, {
-						text: _('console_save_snippet'),
-						handler: function() {
-							this.saveSnippet();
-						},
-						scope: this
-					}]
-				}
-				,handler: function(){return false;}
-			}, {
-				xtype: 'button'
-				, text: _('console_load')
-				, style: 'marginLeft:10px; float:right'
-				, menu: {
-					items: [{
-						text: _('console_load_from_file'),
-						handler: function () {
-							this.getFiles();
-						},
-						scope: this
-					}, {
-						text: _('console_load_from_snippet'),
-						handler: function () {
-							this.getSnippets();
-						},
-						scope: this
-					}]
-				}
-				, handler: function () {
-					return false;
-				}
-			}, {
-				xtype: 'button'
-				, text: _('console_clear')
-				, style: 'float:right'
-				, handler: function () {
-					Ext.getCmp('mod-console-codeeditor').setValue('<?php\n');
-				}
-			}]
+            xtype: 'toolbar'
+            ,items: [
+                {
+                    text: _('console_exec')
+                    ,listeners: {
+                        click: function () {
+                            this.request();
+                        }
+                        ,scope: this
+                    }
+                }
+                ,'->'
+                ,{
+                    text: _('console_save')
+                    ,menu: {
+                        items: [{
+                            text: _('console_save_to_file'),
+                            handler: function() {
+                            this.saveFile();
+                            },
+                            scope: this
+                        },{
+                            text: _('console_save_snippet'),
+                            handler: function() {
+                            this.saveSnippet();
+                            },
+                            scope: this
+                        }]
+                    }
+                }
+                ,{
+                    text: _('console_load')
+                    ,menu: {
+                        items: [{
+                            text: _('console_load_from_file'),
+                                handler: function () {
+                                this.getFiles();
+                            },
+                            scope: this
+                        },{
+                            text: _('console_load_from_snippet'),
+                                handler: function () {
+                                this.getSnippets();
+                            },
+                            scope: this
+                        }]
+                    }
+                },{
+                    text: _('console_clear')
+                    ,handler: function () {
+                        Ext.getCmp('mod-console-codeeditor').setValue('<?php\n');
+                    }
+                }
+            ]
 		},{
 			xtype: 'modx-vtabs'
 			,defaults: {
@@ -317,7 +310,6 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
 			}, {
 				xtype: 'textfield',
 				name: 'name',
-				allowBlank: false,
 				value: ModConsole.snippetName || 'test',
 				anchor: '100%'
 			}, {
@@ -357,7 +349,6 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
 			}, {
 				xtype: 'textfield',
 				name: 'name',
-				allowBlank: false,
 				fieldLabel: _('console_enter_file_name'),
 				value: ModConsole.fileName || 'test',
 				anchor: '100%'
@@ -387,7 +378,6 @@ ModConsole.window.SaveCode = function (config) {
 
 	Ext.applyIf(config, {
 		width: 300,
-		autoHeight: true,
 		modal: true,
 		url: 'components/console/connectors/console.php',
 		keys: [{
