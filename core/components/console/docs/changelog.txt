@@ -1,6 +1,7 @@
-Console-2.0.4-beta
+Console-2.1.0-beta
 =============================================================
-- Ignoring code changes while recursive queries going;
+- Added a feature to save the console code to file and load from file.
+- Added a feature to save the console code to snippet and load from snippet.
 
 Console-2.0.3-beta
 =============================================================

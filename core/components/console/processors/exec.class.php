@@ -1,23 +1,14 @@
 <?php
 
-class ConsoleExecProcessor extends modProcessor{
-    var $permission = 'console';
-    
-    function checkPermissions() {
-        if(!$this->modx->hasPermission($this->permission)){
-            return  false;
-        }
-        return true;
-    }
+require_once dirname(__FILE__) . '/console.class.php';
+
+class ConsoleExecProcessor extends modConsoleProcessor{
     
     public function process() {
         $modx = & $this->modx;
         $modx->setLogTarget('HTML');
         $modx->setLogLevel(xPDO::LOG_LEVEL_DEBUG);
         $code = $this->getProperty('code');
-        if (!$code && isset($_SESSION['Console']['code'])) {
-            $code = $_SESSION['Console']['code'];
-        }
         $_SESSION['Console']['code'] = $code;
         $code = preg_replace('/^ *(<\?php|<\?)/mi', '', $code);
         ob_start();
@@ -37,4 +28,3 @@ class ConsoleExecProcessor extends modProcessor{
 }
 
 return 'ConsoleExecProcessor';
-?>
