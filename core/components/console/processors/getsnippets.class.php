@@ -1,6 +1,9 @@
 <?php
 
-class ConsoleGetSnippetsProcessor extends modProcessor{
+require_once dirname(__FILE__) . '/console.class.php';
+
+class ConsoleGetSnippetsProcessor extends modConsoleProcessor{
+    
     public function process() {
         $snippets = array();
         $q = $this->modx->newQuery('modSnippet');

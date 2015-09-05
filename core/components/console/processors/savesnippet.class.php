@@ -1,6 +1,9 @@
 <?php
 
-class ConsoleSaveSnippetProcessor extends modProcessor{
+require_once dirname(__FILE__) . '/console.class.php';
+
+class ConsoleSaveSnippetProcessor extends modConsoleProcessor{
+
     public function process() {
         $code = trim($this->getProperty('code',''));
         $code = preg_replace('/^ *(<\?php|<\?)/mi', '', $code);

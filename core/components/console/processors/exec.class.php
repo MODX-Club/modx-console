@@ -1,14 +1,8 @@
 <?php
 
-class ConsoleExecProcessor extends modProcessor{
-    var $permission = 'console';
-    
-    function checkPermissions() {
-        if(!$this->modx->hasPermission($this->permission)){
-            return  false;
-        }
-        return true;
-    }
+require_once dirname(__FILE__) . '/console.class.php';
+
+class ConsoleExecProcessor extends modConsoleProcessor{
     
     public function process() {
         $modx = & $this->modx;

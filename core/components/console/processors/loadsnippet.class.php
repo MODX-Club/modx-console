@@ -1,6 +1,9 @@
 <?php
 
-class ConsoleLoadSnippetProcessor extends modProcessor{
+require_once dirname(__FILE__) . '/console.class.php';
+
+class ConsoleLoadSnippetProcessor extends modConsoleProcessor{
+
     public function process() {
         $name = trim($this->getProperty('file',''));
         if (empty($name)) return $this->failure($this->modx->lexicon('console_err_snippet_ns'));
