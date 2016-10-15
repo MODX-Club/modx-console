@@ -202,6 +202,7 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
 		var code = area.getValue();
 
 		var upd = this.resultPanel.getUpdater();
+        	upd.timeout = 0;
 		upd.update({
 			url: ModConsole.config.connector_url + 'console.php',
 			params:{
