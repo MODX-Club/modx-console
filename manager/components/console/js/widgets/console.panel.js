@@ -55,8 +55,8 @@ ModConsole.panel.CodeEditor = function(config) {
 					}, this);
 					upd.on('update',function(result, response){
 						var res = JSON.parse(response.responseText);
-						this.resultPanel.update(res.output);
-						this.coderesultText.setValue(res.output);
+						this.resultPanel.update(res.output+'<br /><br />'+res.perf);
+						this.coderesultText.setValue(res.output+'\r\n\r\n'+res.perf);
 						if (res.completed === false) {
 							upd.showLoadIndicator = false;
 							this.request();
@@ -202,7 +202,6 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
 		var code = area.getValue();
 
 		var upd = this.resultPanel.getUpdater();
-        	upd.timeout = 0;
 		upd.update({
 			url: ModConsole.config.connector_url + 'console.php',
 			params:{
