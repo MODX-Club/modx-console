@@ -55,14 +55,8 @@ ModConsole.panel.CodeEditor = function(config) {
 					}, this);
 					upd.on('update',function(result, response){
 						var res = JSON.parse(response.responseText);
-						var check = Ext.getCmp('console-report').checked;
-						if(check === true && res.output.length != 0) {
-							this.resultPanel.update(res.output+'<br /><br />'+res.report);
-							this.coderesultText.setValue(res.output+'\r\n\r\n'+res.report);
-						} else {
-							this.resultPanel.update(res.output);
-							this.coderesultText.setValue(res.output);
-						}
+						this.resultPanel.update(res.output);
+						this.coderesultText.setValue(res.output);
 						if (res.completed === false) {
 							upd.showLoadIndicator = false;
 							this.request();
@@ -132,6 +126,14 @@ ModConsole.panel.CodeEditor = function(config) {
                 	xtype: 'checkbox',
     				hideLabel: true,
     				boxLabel: '<div style="padding:0.25em 0 0 2em;">'+_('console_report')+'</div>',
+    				//style: {position:'relative'},
+    				checked: true
+                }
+                ,{
+    				id: 'console-show-errors',
+                	xtype: 'checkbox',
+    				hideLabel: true,
+    				boxLabel: '<div style="padding:0.25em 0 0 2em;">'+_('console_show_errors')+'</div>',
     				//style: {position:'relative'},
     				checked: true
                 }
@@ -214,14 +216,17 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
 
 		var area = Ext.getCmp('mod-console-codeeditor');
 		var code = area.getValue();
-
+        
+        
 		var upd = this.resultPanel.getUpdater();
 		upd.timeout = 0;
 		upd.update({
 			url: ModConsole.config.connector_url + 'console.php',
 			params:{
-				action: 'exec',
-				code: code
+				action: 'exec'
+                ,show_report: Ext.getCmp('console-report').checked * 1
+                ,show_errors: Ext.getCmp('console-show-errors').checked * 1
+				,code: code
 			}
 		});
 	},

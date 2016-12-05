@@ -6,8 +6,13 @@ class ConsoleExecProcessor extends modConsoleProcessor{
     
     public function process() {
         $modx = & $this->modx;
-        $modx->setLogTarget('HTML');
-        $modx->setLogLevel(xPDO::LOG_LEVEL_DEBUG);
+        
+        if($this->getProperty("show_errors", 1)){
+            ini_set("display_errors", 1);
+            $modx->setLogTarget('HTML');
+            $modx->setLogLevel(xPDO::LOG_LEVEL_DEBUG);
+        }
+        
         $code = $this->getProperty('code');
         $_SESSION['Console']['code'] = $code;
         $code = preg_replace('/^ *(<\?php|<\?)/mi', '', $code);
@@ -29,17 +34,27 @@ class ConsoleExecProcessor extends modConsoleProcessor{
                 unset($_SESSION['Console']['completed']);
             }
         }
-        $timeAfter = $modx->queryTime;
-        $queryAfter = isset($modx->executedQueries) ? $modx->executedQueries : 0;
-        $sqlTime = ($timeAfter - $timePre);
-        $phpTime = ($totalTime - $sqlTime);
-        $report = 'SQL time: '.sprintf("%2.4f s", $sqlTime);
-        $report .= ' SQL queries: '.($queryAfter - $queryPre);
-        $report .= ' PHP time: '.sprintf("%2.4f s", $phpTime);
-        $report .= ' Total time: '.sprintf("%2.4f s", $totalTime);
-        $report .= ' Memory: '.$totalMem." MB";
         
-        return $modx->toJSON(array('completed' => $completed, 'output' => $output, 'report' => $report));
+        if($this->getProperty("show_report", 1)){
+            
+            $timeAfter = $modx->queryTime;
+            $queryAfter = isset($modx->executedQueries) ? $modx->executedQueries : 0;
+            $sqlTime = ($timeAfter - $timePre);
+            $phpTime = ($totalTime - $sqlTime);
+            $report = '<pre>';
+            $report .= "\n<hr>";
+            $report .= "SQL time: ".sprintf("%2.4f s", $sqlTime);
+            $report .= "\nSQL queries: ".($queryAfter - $queryPre);
+            $report .= "\nPHP time: ".sprintf("%2.4f s", $phpTime);
+            $report .= "\nTotal time: ".sprintf("%2.4f s", $totalTime);
+            $report .= "\nMemory: ".$totalMem." MB";
+            $report .= "</pre>";
+            
+            $output .= $report;
+        }
+        
+        
+        return $modx->toJSON(array('completed' => $completed, 'output' => $output));
     }
 }
 
