@@ -11,8 +11,14 @@ class ConsoleExecProcessor extends modConsoleProcessor{
         $code = $this->getProperty('code');
         $_SESSION['Console']['code'] = $code;
         $code = preg_replace('/^ *(<\?php|<\?)/mi', '', $code);
+        $queryPre = isset($modx->executedQueries) ? $modx->executedQueries : 0;
+        $timePre = $modx->queryTime;
         ob_start();
+        $prevMem = memory_get_peak_usage(true);
+        $timestart = microtime(true);
         eval($code);
+        $totalTime = (microtime(true) - $timestart);
+        $totalMem = round((memory_get_peak_usage(true) - $prevMem)/1048576,2);
         $output = ob_get_contents();
         ob_end_clean();
         $completed = true;
@@ -23,7 +29,17 @@ class ConsoleExecProcessor extends modConsoleProcessor{
                 unset($_SESSION['Console']['completed']);
             }
         }
-        return $modx->toJSON(array('completed' => $completed, 'output' => $output));
+        $timeAfter = $modx->queryTime;
+        $queryAfter = isset($modx->executedQueries) ? $modx->executedQueries : 0;
+        $sqlTime = ($timeAfter - $timePre);
+        $phpTime = ($totalTime - $sqlTime);
+        $report = 'SQL time: '.sprintf("%2.4f s", $sqlTime);
+        $report .= ' SQL queries: '.($queryAfter - $queryPre);
+        $report .= ' PHP time: '.sprintf("%2.4f s", $phpTime);
+        $report .= ' Total time: '.sprintf("%2.4f s", $totalTime);
+        $report .= ' Memory: '.$totalMem." MB";
+        
+        return $modx->toJSON(array('completed' => $completed, 'output' => $output, 'report' => $report));
     }
 }
 
