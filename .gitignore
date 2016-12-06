@@ -1,2 +1,16 @@
 .git
 /_build/build.config.php
+
+/*
+
+!/.gitignore
+
+!/assets
+!/core
+!/manager
+
+/assets/*
+/core/*
+/manager/*
+
+!/*/console

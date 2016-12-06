@@ -1,3 +1,7 @@
+Console-2.2.0-beta
+=============================================================
+- Added execution report
+
 Console-2.1.0-beta
 =============================================================
 - Added a feature to save the console code to file and load from file.

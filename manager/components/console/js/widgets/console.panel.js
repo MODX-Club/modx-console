@@ -121,6 +121,22 @@ ModConsole.panel.CodeEditor = function(config) {
                         ,scope: this
                     }
                 }
+                ,{
+    				id: 'console-report',
+                	xtype: 'checkbox',
+    				hideLabel: true,
+    				boxLabel: '<div style="padding:0.25em 0 0 2em;">'+_('console_report')+'</div>',
+    				//style: {position:'relative'},
+    				checked: true
+                }
+                ,{
+    				id: 'console-show-errors',
+                	xtype: 'checkbox',
+    				hideLabel: true,
+    				boxLabel: '<div style="padding:0.25em 0 0 2em;">'+_('console_show_errors')+'</div>',
+    				//style: {position:'relative'},
+    				checked: true
+                }
                 ,'->'
                 ,{
                     text: _('console_save')
@@ -200,14 +216,17 @@ Ext.extend(ModConsole.panel.CodeEditor,MODx.Panel, {
 
 		var area = Ext.getCmp('mod-console-codeeditor');
 		var code = area.getValue();
-
+        
+        
 		var upd = this.resultPanel.getUpdater();
-        	upd.timeout = 0;
+		upd.timeout = 0;
 		upd.update({
 			url: ModConsole.config.connector_url + 'console.php',
 			params:{
-				action: 'exec',
-				code: code
+				action: 'exec'
+                ,show_report: Ext.getCmp('console-report').checked * 1
+                ,show_errors: Ext.getCmp('console-show-errors').checked * 1
+				,code: code
 			}
 		});
 	},
