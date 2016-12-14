@@ -41,13 +41,13 @@ class ConsoleExecProcessor extends modConsoleProcessor{
             $queryAfter = isset($modx->executedQueries) ? $modx->executedQueries : 0;
             $sqlTime = ($timeAfter - $timePre);
             $phpTime = ($totalTime - $sqlTime);
-            $report = '<pre>';
-            $report .= "\n<hr>";
+            $report = "<hr />\n";
+            $report .= "<pre>\n";
             $report .= "SQL time: ".sprintf("%2.4f s", $sqlTime);
             $report .= "\nSQL queries: ".($queryAfter - $queryPre);
             $report .= "\nPHP time: ".sprintf("%2.4f s", $phpTime);
             $report .= "\nTotal time: ".sprintf("%2.4f s", $totalTime);
-            $report .= "\nMemory: ".$totalMem." MB";
+            $report .= "\nMemory: ".$totalMem." MB\n";
             $report .= "</pre>";
             
             $output .= $report;
