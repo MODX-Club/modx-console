@@ -94,7 +94,7 @@ ModConsole.panel.CodeEditor = function(config) {
 			id: 'mod-console-codeeditor'
 			,xtype: Ext.ComponentMgr.types['modx-texteditor'] ? 'modx-texteditor' : 'textarea'
 			,mimeType: 'application/x-php'
-			,height: 300
+			,height: 600
 			,width: 'auto'
 			,style: {
 				margin: '15px'
