@@ -21,11 +21,16 @@ class ConsoleExecProcessor extends modConsoleProcessor{
         ob_start();
         $prevMem = memory_get_peak_usage(true);
         $timestart = microtime(true);
-        eval($code);
+        $result = eval($code);
         $totalTime = (microtime(true) - $timestart);
         $totalMem = round((memory_get_peak_usage(true) - $prevMem)/1048576,2);
         $output = ob_get_contents();
         ob_end_clean();
+        
+        if($result){
+            $output = $result;
+        }
+        
         $completed = true;
         if (isset($_SESSION['Console']['completed'])) {
             if ($_SESSION['Console']['completed'] === false) {
