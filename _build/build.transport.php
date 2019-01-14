@@ -3,7 +3,7 @@
 
 
 $pkg_version = '2.2.2';
-$pkg_release = 'beta';
+$pkg_release = 'pl';
 define('PKG_VERSION', $pkg_version); 
 define('PKG_RELEASE', $pkg_release); 
 
