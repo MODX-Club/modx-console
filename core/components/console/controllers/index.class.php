@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . "/../console.class.php";
+
 class ConsoleIndexManagerController extends ConsoleManagerController{
     
     function process(array $scriptProperties = array()) {

@@ -5,20 +5,10 @@ $menus  =  array();
  * Основной контроллер
  */
 
-$action= $modx->newObject('modAction');
-$action->fromArray(array(
-    'id' => 1,
-    'namespace' => NAMESPACE_NAME,
-    'parent' => 0,
-    'controller' => 'console',
-    'haslayout' => 1,
-    'lang_topics' => 'console:default',
-    'assets' => '',
-),'',true,true);
-
 /* load action into menu */
 $menu= $modx->newObject('modMenu');
 $menu->fromArray(array(
+    'action' => 'index',
     'text' => 'console',
     'parent' => 'components',
     'description' => 'console_desc',
@@ -27,14 +17,8 @@ $menu->fromArray(array(
     'params' => '',
     'handler' => '',
     'permissions'   => 'console',
+    'namespace' => NAMESPACE_NAME,
 ),'',true,true);
-$menu->addOne($action);
-unset($action);
-
-$menus[] = $menu;
-
-
- 
 
 $menus[] = $menu;
 
